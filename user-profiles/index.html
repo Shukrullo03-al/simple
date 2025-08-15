@@ -1,68 +1,625 @@
 <!DOCTYPE html>
-<html lang="tg">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Иди Қурбон - Табрикнома</title>
+    <title>Пайванд: Сафари Технологи</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            text-align: center;
             margin: 0;
-            padding: 0;
-            color: #333;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0f0c29, #302b63);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        
+        /* Интихоби қаҳрамон */
+        #character-selection {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 50;
         }
-        h1 {
-            color: #d35400;
+        
+        .characters {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
         }
-        p {
+        
+        .character-option {
+            width: 120px;
+            height: 150px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .character-option:hover {
+            transform: translateY(-10px);
+            border-color: #42f5f5;
+            box-shadow: 0 10px 20px rgba(66,245,245,0.3);
+        }
+        
+        .character-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+        }
+        
+        #akbar-icon { background: #4285F4; }
+        #farzod-icon { background: #EA4335; }
+        #qodir-icon { background: #FBBC05; color: #333; }
+        #kiril-icon { background: #9B59B6; }
+        #zhenya-icon { background: #1ABC9C; }
+        
+        /* Сахнаҳо */
+        #film-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #scene1, #scene2, #scene3 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        
+        #scene1 {
+            z-index: 10;
+        }
+        
+        #title {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #42f5f5;
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #42f5f5; }
+            100% { text-shadow: 0 0 20px #42f5f5, 0 0 30px #4285F4; }
+        }
+        
+        /* Сахнаи асосӣ */
+        #landscape {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: #1a1a2e;
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
+        }
+        
+        /* Қаҳрамон */
+        #hero {
+            position: absolute;
+            width: 100px;
+            height: 120px;
+            bottom: 30%;
+            left: -150px;
+            z-index: 15;
+            transition: left 8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hero-body {
+            width: 80px;
+            height: 90px;
+            background: #4285F4;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .hero-eye {
+            width: 18px;
+            height: 18px;
+            background: #42f5f5;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+            animation: blink 4s infinite, look-around 8s infinite;
+            box-shadow: 0 0 10px #42f5f5;
+        }
+        
+        .left-eye { left: 15px; }
+        .right-eye { right: 15px; }
+        
+        @keyframes blink {
+            0%, 95%, 100% { height: 18px; top: 25px; }
+            97% { height: 3px; top: 35px; }
+        }
+        
+        @keyframes look-around {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+        }
+        
+        .hero-leg {
+            width: 15px;
+            height: 40px;
+            background: #34A853;
+            position: absolute;
+            bottom: -40px;
+            animation: walk 0.5s infinite alternate;
+        }
+        
+        .left-leg { left: 20px; animation-delay: 0.25s; }
+        .right-leg { right: 20px; }
+        
+        @keyframes walk {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-10px) rotate(10deg); }
+        }
+        
+        /* Вирусҳо */
+        .virus {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            bottom: 30%;
+            right: -100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-shadow: 0 0 5px black;
+            box-shadow: 0 0 20px rgba(234,67,53,0.7);
+            animation: virus-float 3s infinite ease-in-out;
+        }
+        
+        #farzod { background: #EA4335; animation: virus-move 7s linear infinite; }
+        #qodir { background: #FBBC05; animation: virus-move 9s linear infinite 2s; }
+        #kiril { background: #9B59B6; animation: virus-move 8s linear infinite 1s; }
+        #zhenya { background: #1ABC9C; animation: virus-move 10s linear infinite 3s; }
+        
+        @keyframes virus-move {
+            0% { right: -100px; }
+            100% { right: 110%; }
+        }
+        
+        @keyframes virus-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        /* Cloud */
+        #cloud {
+            position: absolute;
+            width: 150px;
+            height: 90px;
+            background: white;
+            border-radius: 75px;
+            top: 20%;
+            right: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #0f0c29;
+            font-size: 24px;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.3);
+            animation: cloud-pulse 4s infinite;
+            z-index: 10;
+        }
+        
+        @keyframes cloud-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Сахнаи поён */
+        #scene3 {
+            z-index: 20;
+        }
+        
+        #restart-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 30px;
             font-size: 18px;
-            line-height: 1.6;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(66,133,244,0.4);
         }
-        .social-icons {
-            margin: 20px 0;
+        
+        #restart-btn:hover {
+            background: #34A853;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52,168,83,0.6);
         }
-        .social-icons a {
-            margin: 0 10px;
-            text-decoration: none;
+        
+        /* Explosion effect */
+        .explosion {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(251,188,5,0.8), rgba(234,67,53,0));
+            border-radius: 50%;
+            transform: scale(0);
+            animation: explode 0.5s forwards;
+            z-index: 5;
         }
-        .social-icons img {
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        /* Dialog bubbles */
+        .dialog {
+            position: absolute;
+            background: white;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            max-width: 200px;
+            opacity: 0;
+            animation: fade-in 0.5s forwards;
+            z-index: 30;
+        }
+        
+        @keyframes fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Аниматсияи ғалаба */
+        @keyframes victory {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .victory-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(66,244,155,0.2), transparent);
+            animation: victory 0.5s infinite;
+            z-index: 25;
+        }
+        
+        /* Садо тугма */
+        #sound-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
             width: 40px;
             height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
         }
-        .decoration {
-            margin: 20px 0;
-            font-size: 24px;
-            color: #d35400;
+
+        /* Тугмаи оғоз */
+        #start-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #4285F4;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(66,133,244,0.4);
+        }
+
+        #start-btn:hover {
+            background: #34A853;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52,168,83,0.6);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Иди Қурбон Муборак Бод!</h1>
-        <div class="decoration">✿ ❁ ✿</div>
-        <p>Бо саршавии ин рӯзҳои муқаддас, орзу менамоем ки Иди Қурбон барои шумо ва оилаи азизатон бо баракат ва оромӣ гузарад.</p>
-        <p>Ҳамаи хайрҳо ва раҳматҳои Худоро дар ин рӯзҳо қабул намоед!</p>
+    <div id="film-container">
+        <!-- Тугмаи садо -->
+        <button id="sound-btn">♪</button>
         
-        <div class="social-icons">
-            <p>Моро дар шабакаҳои иҷтимоӣ пайгирӣ кунед:</p>
-            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/124/124010.png" alt="Facebook"></a>
-            <a href="https://www.instagram.com/imonov_shukrullo/"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
-            <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter"></a>
-            <a href="@shukrullllo"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"></a>
+        <!-- Интихоби қаҳрамон -->
+        <div id="character-selection">
+            <h1>Қаҳрамони худро интихоб кунед:</h1>
+            <div class="characters">
+                <div class="character-option" id="akbar-option">
+                    <div class="character-icon" id="akbar-icon">🤖</div>
+                    <span>Акбар</span>
+                </div>
+                <div class="character-option" id="farzod-option">
+                    <div class="character-icon" id="farzod-icon">👹</div>
+                    <span>Фарзод</span>
+                </div>
+                <div class="character-option" id="qodir-option">
+                    <div class="character-icon" id="qodir-icon">👺</div>
+                    <span>Қодир</span>
+                </div>
+                <div class="character-option" id="kiril-option">
+                    <div class="character-icon" id="kiril-icon">💀</div>
+                    <span>Кирил</span>
+                </div>
+                <div class="character-option" id="zhenya-option">
+                    <div class="character-icon" id="zhenya-icon">👾</div>
+                    <span>Женя</span>
+                </div>
+            </div>
+            <p>Қаҳрамони интихобшуда ба Cloud меравад, боқӣ ҳамчун душман амал мекунанд!</p>
         </div>
         
-        <div class="decoration">❁ ✽ ❁</div>
-        <p>Бо эҳтимоми баланд, дастаи мо!</p>
+        <!-- Сахнаи оғоз -->
+        <div id="scene1">
+            <h1 id="title">Пайванд: Сафари Технологи</h1>
+            <p id="subtitle">Акбар - роботи дастаи Пайванд, бояд аз вирусҳо гузарад ва ба Cloud бирасад!</p>
+            <button id="start-btn">Оғоз</button>
+        </div>
+        
+        <!-- Сахнаи асосӣ -->
+        <div id="scene2">
+            <div id="landscape"></div>
+            
+            <!-- Қаҳрамони асосӣ -->
+            <div id="hero"></div>
+            
+            <!-- Cloud -->
+            <div id="cloud">CLOUD</div>
+            
+            <!-- Вирусҳо -->
+            <div class="virus" id="farzod">Фарзод</div>
+            <div class="virus" id="qodir">Қодир</div>
+            <div class="virus" id="kiril">Кирил</div>
+            <div class="virus" id="zhenya">Женя</div>
+            
+            <!-- Диалогҳо -->
+            <div class="dialog" id="dialog1" style="top: 20%; left: 20%;">Ман ба Cloud меравам!</div>
+            <div class="dialog" id="dialog2" style="top: 40%; right: 20%;">Мо туро қатъ мекунем!</div>
+        </div>
+        
+        <!-- Сахнаи поён -->
+        <div id="scene3">
+            <h2 style="font-size: 2.5em; color: #42f5f5;" id="ending-title">Акбар ғолиб шуд!</h2>
+            <p style="font-size: 1.2em;" id="ending-message">Вирусҳои Фарзод, Қодир, Кирил ва Женя шикаст хӯрданд!</p>
+            <p style="font-size: 1.5em; margin-top: 20px;">Дастаи Пайванд ҳамеша ғолиб аст!</p>
+            <button id="restart-btn">Бозӣ кардан</button>
+        </div>
     </div>
+
+    <script>
+        // Элементҳо
+        const startBtn = document.getElementById('start-btn');
+        const scene1 = document.getElementById('scene1');
+        const scene2 = document.getElementById('scene2');
+        const scene3 = document.getElementById('scene3');
+        const hero = document.getElementById('hero');
+        const restartBtn = document.getElementById('restart-btn');
+        const dialog1 = document.getElementById('dialog1');
+        const dialog2 = document.getElementById('dialog2');
+        const filmContainer = document.getElementById('film-container');
+        const soundBtn = document.getElementById('sound-btn');
+        const subtitle = document.getElementById('subtitle');
+        const endingTitle = document.getElementById('ending-title');
+        const endingMessage = document.getElementById('ending-message');
+        const characterSelection = document.getElementById('character-selection');
+        const title = document.getElementById('title');
+        const cloud = document.getElementById('cloud');
+        
+        // Танзимот
+        let soundOn = true;
+        let selectedCharacter = 'akbar';
+        
+        // Оғози филм
+        function startFilm() {
+            scene1.style.display = 'none';
+            scene2.style.display = 'block';
+            
+            // Диалогҳо
+            setTimeout(() => {
+                dialog1.style.animation = 'fade-in 0.5s forwards';
+                setTimeout(() => {
+                    dialog1.style.animation = 'fade-in 0.5s reverse forwards';
+                    setTimeout(() => {
+                        dialog2.style.animation = 'fade-in 0.5s forwards';
+                        setTimeout(() => {
+                            dialog2.style.animation = 'fade-in 0.5s reverse forwards';
+                        }, 2000);
+                    }, 500);
+                }, 2000);
+            }, 1000);
+            
+            // Ҳаракати қаҳрамон
+            hero.style.left = '80%';
+            
+            // Explosion effects
+            setTimeout(createExplosion, 3000, 30, 40);
+            setTimeout(createExplosion, 4500, 70, 60);
+            
+            // Поён филм
+            setTimeout(() => {
+                scene2.style.display = 'none';
+                scene3.style.display = 'flex';
+                showVictory();
+            }, 10000);
+        }
+        
+        // Аз нав оғоз кардан
+        function restartFilm() {
+            scene3.style.display = 'none';
+            characterSelection.style.display = 'flex';
+            hero.style.left = '-150px';
+            dialog1.style.animation = '';
+            dialog2.style.animation = '';
+        }
+        
+        // Explosion effect
+        function createExplosion(x, y) {
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            explosion.style.left = `${x}%`;
+            explosion.style.top = `${y}%`;
+            filmContainer.appendChild(explosion);
+            
+            setTimeout(() => {
+                explosion.remove();
+            }, 500);
+        }
+        
+        // Эффекти ғалаба
+        function showVictory() {
+            const effect = document.createElement('div');
+            effect.className = 'victory-effect';
+            scene3.appendChild(effect);
+            
+            // Чароғҳои рангӣ
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const light = document.createElement('div');
+                    light.className = 'explosion';
+                    light.style.left = Math.random() * 100 + '%';
+                    light.style.top = Math.random() * 100 + '%';
+                    light.style.background = `radial-gradient(circle, 
+                        hsl(${Math.random() * 360}, 100%, 50%), transparent)`;
+                    scene3.appendChild(light);
+                    
+                    setTimeout(() => {
+                        light.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Танзими ҳикоя бар асоси интихоб
+        function setupStory(character) {
+            selectedCharacter = character;
+            
+            const characterData = {
+                'akbar': {
+                    title: "Акбар - роботи дастаи Пайванд",
+                    subtitle: "Акбар бояд аз вирусҳо гузарад ва ба Cloud бирасад!",
+                    endingTitle: "Акбар ғолиб шуд!",
+                    endingMessage: "Вирусҳои Фарзод, Қодир, Кирил ва Женя шикаст хӯрданд!",
+                    heroHTML: `
+                        <div class="hero-body">
+                            <div class="hero-eye left-eye"></div>
+                            <div class="hero-eye right-eye"></div>
+                        </div>
+                        <div class="hero-leg left-leg"></div>
+                        <div class="hero-leg right-leg"></div>
+                    `,
+                    cloudText: "CLOUD",
+                    cloudColor: "white"
+                },
+                'farzod': {
+                    title: "Фарзод - вируси хатарнок",
+                    subtitle: "Фарзод бояд ба Cloud ҳамла кунад ва онро нобуд кунад!",
+                    endingTitle: "Фарзод ғолиб шуд!",
+                    endingMessage: "Cloud нобуд шуд ва система хароб гардид!",
+                    heroHTML: <div class="hero-body" style="background: #EA4335">👹</div>,
+                    cloudText: "DESTROY",
+                    cloudColor: "#EA4335"
+                },
+                'qodir': {
+                    title: "Қодир - вируси зиндагикуш",
+                    subtitle: "Қодир бояд системаро ишғол кунад ва қувва гирад!",
+                    endingTitle: "Қодир ғолиб шуд!",
+                    endingMessage: "Система ишғол шуд ва ҳамаи маълумот нобуд шуд!",
+                    heroHTML: <div class="hero-body" style="background: #FBBC05">👺</div>,
+                    cloudText: "OCCUPIED",
+                    cloudColor: "#FBBC05"
+                },
+                'kiril': {
+                    title: "Кирил - вируси пайвандкуш",
+                    subtitle: "Кирил бояд ҳамаи пайвандҳоро қатъ кунад!",
+                    endingTitle: "Кирил ғолиб шуд!",
+                    endingMessage: "Ҳамаи пайвандҳо қатъ шуданд ва система изолят шуд!",
+                    heroHTML: <div class="hero-body" style="background: #9B59B6">💀</div>,
+                    cloudText: "DISCONNECT",
+                    cloudColor: "#9B59B6"
+                },
+                'zhenya': {
+                    title: "Женя - вируси нусхабардор",
+                    subtitle: "Женя бояд ҳамаи маълумотро нусхабардорӣ кунад!",
+                    endingTitle: "Женя ғолиб шуд!",
+                    endingMessage: "Ҳамаи маълумот нусхабардорӣ шуд ва фурӯхта шуд!",
+                    heroHTML: <div class="hero-body" style="background: #1ABC9C">👾</div>,
+                    cloudText: "COPY DATA",
+                    cloudColor: "#1ABC9C"
+                }
+            };
+            
+            // Навсозии ҳама чиз
+            title.textContent = characterData[character].title;
+            subtitle.textContent = characterData[character].subtitle;
+            endingTitle.textContent = characterData[character].endingTitle;
+            endingMessage.textContent = characterData[character].endingMessage;
+            
+            hero.innerHTML = characterData[character].heroHTML;
+            cloud.textContent = characterData[character].cloudText;
+            cloud.style.background = characterData[character].cloudColor;
+            
+            // Пинҳон кардани вируси интихобшуда
+            document.querySelectorAll('.virus').forEach(virus => {
+                virus.style.display = 'block';
+                if (virus.id === character) {
+                    virus.style.display = 'none';
+                }
+            });
+        }
+        
+        // Интихоби қаҳрамон
+        document.querySelectorAll('.character-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const character = this.id.replace('-option', '');
+                setupStory(character);
+                characterSelection.style.display = 'none';
+                scene1.style.display = 'flex';
+            });
+        });
+        
+        // Тугмаҳо
+        startBtn.addEventListener('click', startFilm);
+        restartBtn.addEventListener('click', restartFilm);
+        
+        // Садо тугма
+        soundBtn.addEventListener('click', () => {
+            soundOn = !soundOn;
+            soundBtn.textContent = soundOn ? '♪' : '🔇';
+        });
+        
+        // Аввал интихоби қаҳрамонро нишон диҳед
+        characterSelection.style.display = 'flex';
+        scene1.style.display = 'none';
+        scene2.style.display = 'none';
+        scene3.style.display = 'none';
+    </script>
 </body>
 </html>
